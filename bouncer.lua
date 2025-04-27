@@ -1,31 +1,30 @@
-local M = {}
 
--- State
-local pos = 0
-local dir = 1
-local width = 80
-local speed = 2
-local invader = "👾"
+local trex_pos = 0
+local trex_dir = 1
+local trex_width = 80
+local trex_speed = 2  
+local invader_icon = "👾"
 
-function M.bounce()
-  pos = pos + (dir * speed)
-  if pos >= width then
-    dir = -1
-  elseif pos <= 0 then
-    dir = 1
+local function BounceTrex()
+  trex_pos = trex_pos + (trex_dir * trex_speed)
+
+  if trex_pos >= trex_width then
+    trex_dir = -1
+  elseif trex_pos <= 0 then
+    trex_dir = 1
   end
-  local dino = dir == 1 and "🦖" or "🦕"
-  return string.rep(" ", pos) .. dino .. " " .. invader
+
+  local dino_icon = trex_dir == 1 and "🦖" or "🦕"
+  return string.rep(" ", trex_pos) .. dino_icon .. " " .. invader_icon
 end
 
-function M.start()
-  vim.fn.timer_start(100, function()
-    vim.schedule(function()
-      if vim.bo.buftype == "" then
-        vim.opt_local.winbar = M.bounce()
-      end
-    end)
-  end, { ["repeat"] = -1 })
+local function set_trex_winbar()
+  if vim.bo.buftype == "" then
+    vim.opt_local.winbar = BounceTrex()
+  end
 end
 
-return M
+--walking speed
+vim.fn.timer_start(100, function()
+  vim.schedule(set_trex_winbar)
+end, { ["repeat"] = -1 })
