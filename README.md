@@ -1,2 +1,2 @@
 # nvimBouncer
-nvim emoji top bar animation
+nvim emoji top bar animation, add this to your init.lua
